@@ -1,0 +1,112 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Acortador de URLs API",
+    "description": "Una API para acortar URLs utilizando Node.js y Express",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor local de desarrollo"
+    }
+  ],
+  "paths": {
+    "/api/hello": {
+      "get": {
+        "summary": "Prueba de conexión",
+        "description": "Devuelve un saludo simple para verificar que la API está funcionando.",
+        "responses": {
+          "200": {
+            "description": "Respuesta exitosa",
+            "content": {
+              "application/json": {
+                "example": {
+                  "greeting": "hello API"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shorturl": {
+      "post": {
+        "summary": "Acortar una URL",
+        "description": "Recibe una URL y devuelve una versión corta",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "example": "https://www.freecodecamp.org"
+                  }
+                },
+                "required": ["url"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "URL acortada exitosamente",
+            "content": {
+              "application/json": {
+                "example": {
+                  "original_url": "https://www.freecodecamp.org",
+                  "short_url": 1
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "URL inválida",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "invalid url"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shorturl/{short_url}": {
+      "get": {
+        "summary": "Redirigir a la URL original",
+        "description": "Usa una URL corta para redirigir al destino original",
+        "parameters": [
+          {
+            "name": "short_url",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirección exitosa"
+          },
+          "404": {
+            "description": "URL corta no encontrada",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "No short URL found for the given input"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

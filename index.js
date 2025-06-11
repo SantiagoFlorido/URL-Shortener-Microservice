@@ -6,6 +6,9 @@ const dns = require('dns');
 const urlParser = require('url');
 const app = express();
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+
 // Basic Configuration
 const port = process.env.PORT || 3000;
 
@@ -20,6 +23,8 @@ app.get('/', function(req, res) {
 app.get('/api/hello', function(req, res) {
   res.json({ greeting: 'hello API' });
 });
+
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 let urls = [];
 
